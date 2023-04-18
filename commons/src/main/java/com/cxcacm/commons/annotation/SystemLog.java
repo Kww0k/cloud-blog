@@ -1,4 +1,4 @@
-package com.cxcacm.auth.config.log.annotation;
+package com.cxcacm.commons.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

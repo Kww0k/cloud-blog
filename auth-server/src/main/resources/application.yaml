@@ -5,7 +5,7 @@ spring:
     name: userAuthService
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.233.150:3306/test
+    url: jdbc:mysql://192.168.233.150:3306/oauth
     username: root
     password: 123456
   redis:

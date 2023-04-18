@@ -1,7 +1,7 @@
-package com.cxcacm.auth.config.log.aspect;
+package com.cxcacm.auth.aspect;
 
 import com.alibaba.fastjson.JSON;
-import com.cxcacm.auth.config.log.annotation.SystemLog;
+import com.cxcacm.commons.annotation.SystemLog;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class LogAspect {
 
-    @Pointcut("@annotation(com.cxcacm.auth.config.log.annotation.SystemLog)")
+    @Pointcut("@annotation(com.cxcacm.commons.annotation.SystemLog)")
     public void pt() {
 
     }

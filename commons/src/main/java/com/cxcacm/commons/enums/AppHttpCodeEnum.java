@@ -2,7 +2,7 @@ package com.cxcacm.commons.enums;
 
 public enum AppHttpCodeEnum {
 
-    SUCCESS(200, "操作成功");
+    SUCCESS(200, "操作成功"),SYSTEM_ERROR(500, "系统错误");
 
 
     int code;

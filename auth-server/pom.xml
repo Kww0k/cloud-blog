@@ -19,6 +19,7 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>com.cxcacm.auth</groupId>
             <artifactId>commons</artifactId>
