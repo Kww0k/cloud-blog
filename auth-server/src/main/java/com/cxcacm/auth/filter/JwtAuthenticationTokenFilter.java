@@ -1,8 +1,10 @@
 package com.cxcacm.auth.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.cxcacm.commons.entity.LoginUser;
 import com.cxcacm.commons.entity.ResponseResult;
+import com.cxcacm.commons.entity.User;
 import com.cxcacm.commons.enums.AppHttpCodeEnum;
 import com.cxcacm.commons.utils.JwtUtil;
 import com.cxcacm.auth.filter.security.RedisCache;
@@ -53,12 +55,18 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
         String userId = claims.getSubject();
-        LoginUser loginUser = redisCache.getCacheObject(LOGIN_INFO + userId);
-        if (Objects.isNull(loginUser)) {
+        Object value = redisCache.getCacheObject(LOGIN_INFO + userId);
+        if (Objects.isNull(value)) {
             ResponseResult responseResult = ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR);
             WebUtils.renderString(response, JSON.toJSONString(responseResult));
             return;
         }
+        Long id =  Long.parseLong(((JSONObject) ((JSONObject) value).get("user")).get("id").toString());
+        String username = (String) ((JSONObject) ((JSONObject) value).get("user")).get("username");
+        String password = (String) ((JSONObject) ((JSONObject) value).get("user")).get("password");
+        User user = new User(id, username, password);
+        LoginUser loginUser = new LoginUser(user);
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, null);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request, response);
