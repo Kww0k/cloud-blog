@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: community-server
+  cloud:
+    nacos:
+      config:
+        fileExtension: yaml
+        serverAddr: 192.168.233.150:8848

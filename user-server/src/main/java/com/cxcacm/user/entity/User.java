@@ -1,4 +1,4 @@
-package com.cxcacm.auth.entity;
+package com.cxcacm.user.entity;
 
 import lombok.Data;
 
@@ -16,4 +16,6 @@ public class User {
     private String username;
 
     private String password;
+
+    private String nickname;
 }
