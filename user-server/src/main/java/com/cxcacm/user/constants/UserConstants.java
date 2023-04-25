@@ -12,4 +12,8 @@ public class UserConstants {
     public static final String AUTH_TOKEN = "Authorization";
 
     public static final String AUTH_USER = "user_name";
+
+    public static final int TOKEN_START = 7;
+
+    public static final String LOGIN_KEY = "LOGIN_KEY:";
 }

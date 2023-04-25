@@ -37,7 +37,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/pangzi/test").anonymous()
                 .anyRequest().authenticated()  //
                 .and()
                 .formLogin().permitAll();    //使用表单登录
