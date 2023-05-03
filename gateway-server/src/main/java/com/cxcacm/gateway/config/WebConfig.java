@@ -10,7 +10,7 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
  * @author oolong
  */ 
 @Configuration
-public class GulimallCorsConfiguration {
+public class WebConfig {
     /**
      * springboot提供了CorsWebFilter进行跨域
      *

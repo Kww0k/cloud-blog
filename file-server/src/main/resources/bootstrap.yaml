@@ -1,6 +1,6 @@
 spring:
   application:
-    name: user-server
+    name: file-server
   cloud:
     nacos:
       discovery:

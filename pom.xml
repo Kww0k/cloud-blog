@@ -21,6 +21,7 @@
         <module>community-server</module>
         <module>event-server</module>
         <module>user-server</module>
+        <module>file-server</module>
     </modules>
     <properties>
         <java.version>17</java.version>

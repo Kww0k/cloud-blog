@@ -18,4 +18,8 @@ public class User {
     private String password;
 
     private String nickname;
+
+    private String sex;
+
+    private String email;
 }

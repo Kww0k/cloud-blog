@@ -3,6 +3,8 @@ spring:
     name: gateway-server
   cloud:
     nacos:
+      discovery:
+        server-addr: 192.168.233.150
       config:
         fileExtension: yaml
         serverAddr: 192.168.233.150:8848

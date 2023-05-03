@@ -1,12 +1,10 @@
-package com.cxcacm.user.fillter;
+package com.cxcacm.file.fillter;
 
 import com.alibaba.fastjson.JSON;
-import com.cxcacm.user.entity.ResponseResult;
-import com.cxcacm.user.entity.User;
-import com.cxcacm.user.enums.AppHttpCodeEnum;
-import com.cxcacm.user.utils.JwtUtil;
-import com.cxcacm.user.utils.RedisCache;
-import com.cxcacm.user.utils.WebUtils;
+import com.cxcacm.file.entity.ResponseResult;
+import com.cxcacm.file.enums.AppHttpCodeEnum;
+import com.cxcacm.file.utils.RedisCache;
+import com.cxcacm.file.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,7 +17,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 
-import static com.cxcacm.user.constants.UserConstants.*;
+import static com.cxcacm.file.constants.FileConstants.*;
+
 
 @Component
 public class CxcSecurityFilter extends OncePerRequestFilter {
@@ -33,6 +32,10 @@ public class CxcSecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        if (request.getRequestURL().toString().contains("/file/download/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         String authorization = request.getHeader(AUTH_HEADER);
         String certification = request.getHeader(CERT_HEADER);
         if (!Objects.equals(authorization, AUTH_INFO) || !Objects.equals(certification, CERT_INFO)) {
@@ -40,24 +43,22 @@ public class CxcSecurityFilter extends OncePerRequestFilter {
             WebUtils.renderString(response, JSON.toJSONString(result));
             return;
         }
-        if (!Objects.equals(new URL(request.getRequestURL().toString()).getPath(), "/user/userInfo")) {
-            String username;
-            try {
-                username = (String) JwtUtil.parseJWT(request.getHeader(AUTH_TOKEN).substring(TOKEN_START)).get(AUTH_USER);
-            } catch (Exception e) {
-                e.printStackTrace();
-                ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.AUTH_EXPIRE);
-                WebUtils.renderString(response, JSON.toJSONString(result));
-                return;
-            }
-            String loginCache = username + request.getRemoteAddr();
-            User user = redisCache.getCacheObject(LOGIN_KEY + loginCache);
-            if (user == null) {
-                ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
-                WebUtils.renderString(response, JSON.toJSONString(result));
-                return;
-            }
-        }
+//        String username;
+//        try {
+//            username = (String) JwtUtil.parseJWT(request.getHeader(AUTH_TOKEN).substring(TOKEN_START)).get(AUTH_USER);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.AUTH_EXPIRE);
+//            WebUtils.renderString(response, JSON.toJSONString(result));
+//            return;
+//        }
+//        String loginCache = username + request.getRemoteAddr();
+//        Object user = redisCache.getCacheObject(LOGIN_KEY + loginCache);
+//        if (user == null) {
+//            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+//            WebUtils.renderString(response, JSON.toJSONString(result));
+//            return;
+//        }
         filterChain.doFilter(request, response);
     }
 }
