@@ -1,4 +1,4 @@
-package com.cxcacm.file.fillter;
+package com.cxcacm.file.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.cxcacm.file.entity.ResponseResult;
@@ -14,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Objects;
 
 import static com.cxcacm.file.constants.FileConstants.*;

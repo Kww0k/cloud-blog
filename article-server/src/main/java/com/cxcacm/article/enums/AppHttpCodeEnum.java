@@ -1,4 +1,4 @@
-package com.cxcacm.user.enums;
+package com.cxcacm.article.enums;
 
 public enum AppHttpCodeEnum {
 
@@ -7,12 +7,8 @@ public enum AppHttpCodeEnum {
     NEED_LOGIN(403, "没有登录"),
     AUTH_EXPIRE(401, "认证过期"),
     CXC_AUTH(415, "没有我ACM金牌陈轩丞的认可还想访问?"),
-    HAVE_BEEN_REGISTER(409, "该邮箱已经被注册了"),
     MISSING_PARAM(409, "缺少必要参数"),
-    PASSWORD_DIFFERENT(401, "两次输入的密码不同"),
-    CODE_ERROR(403, "验证码错误"),
-    HAVA_CODE(403, "在5分钟内不能发送第二次验证码");
-
+    TOO_MANY_TAG(412, "选择的标签太多");
 
 
     int code;

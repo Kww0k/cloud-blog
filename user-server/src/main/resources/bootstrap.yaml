@@ -1,6 +1,10 @@
 spring:
   application:
     name: user-server
+  mail:
+    username: E19858591692@163.com
+    password: ILMWDPNGFMTVJUEG
+    host: smtp.163.com
   cloud:
     nacos:
       discovery:

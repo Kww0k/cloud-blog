@@ -1,15 +1,24 @@
 package com.cxcacm.article.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.cxcacm.article.controller.dto.AddArticleDto;
+import com.cxcacm.article.entity.ResponseResult;
+import com.cxcacm.article.service.ArticleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/article")
 public class ArticleController {
 
-    @GetMapping("/test")
-    public String test() {
-        return "pangzi";
+    private final ArticleService articleService;
+
+    @Autowired
+    public ArticleController(ArticleService articleService) {
+        this.articleService = articleService;
+    }
+
+    @PostMapping("/addArticle")
+    public ResponseResult addArticle(@RequestBody AddArticleDto addArticleDto) {
+        return articleService.addArticle(addArticleDto);
     }
 }

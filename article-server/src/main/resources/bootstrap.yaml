@@ -11,4 +11,3 @@ security:
     resource:
       jwt:
         key-value: FatCxcACMChampion
-

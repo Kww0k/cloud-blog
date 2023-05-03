@@ -1,6 +1,6 @@
 package com.cxcacm.user.config;
 
-import com.cxcacm.user.fillter.CxcSecurityFilter;
+import com.cxcacm.user.filter.CxcSecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

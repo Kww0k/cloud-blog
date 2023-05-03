@@ -1,7 +1,6 @@
 package com.cxcacm.file.service.impl;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cxcacm.file.entity.Files;
@@ -39,7 +38,7 @@ public class FilesServiceImpl extends ServiceImpl<FilesMapper, Files> implements
         String originalFilename = file.getOriginalFilename();
         String type = FileUtil.extName(originalFilename);
         long size = file.getSize();
-        if (size > 10 * 1024 * 1024) {
+        if (size > 1024 * 1024) {
             return "上传失败，文件过大";
         }
         File uploadParentFile = new File(fileUploadPath);

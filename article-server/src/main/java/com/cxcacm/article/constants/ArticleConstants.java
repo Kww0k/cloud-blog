@@ -1,6 +1,7 @@
-package com.cxcacm.user.constants;
+package com.cxcacm.article.constants;
 
-public class UserConstants {
+public class ArticleConstants {
+
     public static final String AUTH_HEADER = "CXC_Authorization";
 
     public static final String AUTH_INFO = "CXCACMGoldMedal";
@@ -16,6 +17,4 @@ public class UserConstants {
     public static final int TOKEN_START = 7;
 
     public static final String LOGIN_KEY = "LOGIN_KEY:";
-
-    public static final String VERIFY = "verify:code";
 }

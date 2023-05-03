@@ -1,4 +1,4 @@
-package com.cxcacm.user.service.vo;
+package com.cxcacm.user.controller.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,11 +7,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfoVo {
-    private Long id;
+public class RegisterDto {
+
     private String username;
-    private String nickname;
-    private String url;
-    private String sex;
+
+    private String password;
+
+    private String confirmPassword;
+
     private String email;
+    private String code;
 }
