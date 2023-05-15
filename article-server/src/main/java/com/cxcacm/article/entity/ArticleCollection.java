@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 public class ArticleCollection  {
     //用户名@TableId
     private String username;
-    @TableId
+    //@TableId
     private Long articleId;
 
 
