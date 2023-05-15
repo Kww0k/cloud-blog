@@ -1,6 +1,6 @@
 package com.cxcacm.auth.config;
 
-import com.cxcacm.auth.service.UserDetailServiceImpl;
+import com.cxcacm.auth.service.impl.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,8 +48,8 @@ public class OAuth2Configuration extends AuthorizationServerConfigurerAdapter {
                 .autoApprove(false)    //自动审批，这里关闭，要的就是一会体验那种感觉
                 .scopes("all")     //授权范围，这里我们使用全部all
                 .authorizedGrantTypes("password", "refresh_token")
-                .accessTokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                .refreshTokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30));
+                .accessTokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(14))
+                .refreshTokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(20));
     }
 
     @Bean

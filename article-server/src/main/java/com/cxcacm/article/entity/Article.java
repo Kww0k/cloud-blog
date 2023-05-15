@@ -25,7 +25,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 public class Article  {
     @TableId
     private Long id;
-
     //标题
     private String title;
     //文章内容

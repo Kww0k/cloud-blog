@@ -4,9 +4,8 @@ import com.cxcacm.user.annotation.SystemLog;
 import com.cxcacm.user.entity.ResponseResult;
 import com.cxcacm.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/user")
@@ -18,17 +17,10 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/userInfo")
-    @SystemLog(businessName = "获取用户信息")
-    public ResponseResult getUserInfo() {
-        return userService.getUserInfo();
+    @GetMapping("/setAvatar")
+    @SystemLog(businessName = "设置用户头像")
+    public ResponseResult serAvatar(@RequestParam String username, @RequestParam String url) {
+        return userService.setAvatar(username, url);
     }
 
-
-
-    @GetMapping("/logout")
-    @SystemLog(businessName = "退出登录")
-    public ResponseResult logout() {
-        return userService.logout();
-    }
 }

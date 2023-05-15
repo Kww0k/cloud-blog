@@ -15,4 +15,18 @@ import com.cxcacm.article.entity.ResponseResult;
 public interface ArticleService extends IService<Article> {
 
     ResponseResult addArticle(AddArticleDto addArticleDto);
+
+    ResponseResult getArticleList(Integer pageNum, Integer pageSize);
+
+    ResponseResult getTopFourArticles(String tagName);
+
+    ResponseResult getArticleInfo(Long id);
+
+    ResponseResult getTopTenArticles();
+
+    ResponseResult getSelfArticles(String username);
+
+    ResponseResult updateArticle(Article article);
+
+    ResponseResult deleteArticle(Long id);
 }

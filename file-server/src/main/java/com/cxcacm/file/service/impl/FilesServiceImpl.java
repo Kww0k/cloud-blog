@@ -45,25 +45,18 @@ public class FilesServiceImpl extends ServiceImpl<FilesMapper, Files> implements
         if (!uploadParentFile.exists())
             uploadParentFile.mkdirs();
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        LambdaQueryWrapper<Files> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Files::getName, originalFilename);
-        Files findFile = baseMapper.selectOne(wrapper);
-        if (findFile != null) {
-            return findFile.getUrl();
-        } else  {
-            try {
-                file.transferTo(new File(fileUploadPath + "/" +uuid + "." + type));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            Files files = new Files();
-            files.setName(originalFilename);
-            files.setType(type);
-            files.setSize(size / 1024);
-            files.setUrl("http://localhost:" + port + "/file/download/" + uuid + "." + type);
-            baseMapper.insert(files);
-            return "http://localhost:" + port + "/file/download/" + uuid + "." + type;
+        try {
+            file.transferTo(new File(fileUploadPath + "/" + uuid + "." + type));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        Files files = new Files();
+        files.setName(originalFilename);
+        files.setType(type);
+        files.setSize(size / 1024);
+        files.setUrl("http://8.130.84.120:" + port + "/file/download/" + uuid + "." + type);
+        baseMapper.insert(files);
+        return "http://8.130.84.120:" + port + "/file/download/" + uuid + "." + type;
 
     }
 

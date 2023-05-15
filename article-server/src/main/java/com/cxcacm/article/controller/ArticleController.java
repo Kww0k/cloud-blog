@@ -1,6 +1,8 @@
 package com.cxcacm.article.controller;
 
+import com.cxcacm.article.annotation.SystemLog;
 import com.cxcacm.article.controller.dto.AddArticleDto;
+import com.cxcacm.article.entity.Article;
 import com.cxcacm.article.entity.ResponseResult;
 import com.cxcacm.article.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,50 @@ public class ArticleController {
     }
 
     @PostMapping("/addArticle")
+    @SystemLog(businessName = "添加文章")
     public ResponseResult addArticle(@RequestBody AddArticleDto addArticleDto) {
         return articleService.addArticle(addArticleDto);
+    }
+
+    @GetMapping("/getArticlePage")
+    @SystemLog(businessName = "分页获取文章列表")
+    public ResponseResult getArticleList(Integer pageNum, Integer pageSize) {
+        return articleService.getArticleList(pageNum, pageSize);
+    }
+
+    @GetMapping("/getTopFourArticles")
+    @SystemLog(businessName = "获取不同标签热度前4的文章信息")
+    public ResponseResult getTopFourArticles(String tagName) {
+        return articleService.getTopFourArticles(tagName);
+    }
+
+    @GetMapping("/getTopTenArticles")
+    @SystemLog(businessName = "获取热度前10的文章信息")
+    public ResponseResult getTopTenArticles() {
+        return articleService.getTopTenArticles();
+    }
+
+    @GetMapping("/getArticleInfo/{id}")
+    @SystemLog(businessName = "根据id获取文章的具体信息")
+    public ResponseResult getArticleInfo(@PathVariable Long id) {
+        return articleService.getArticleInfo(id);
+    }
+
+    @GetMapping("/getSelfArticles")
+    @SystemLog(businessName = "获取个人的文章信息")
+    public ResponseResult getSelfArticles(@RequestParam String username) {
+        return articleService.getSelfArticles(username);
+    }
+
+    @PostMapping("/updateArticle")
+    @SystemLog(businessName = "更新文章信息")
+    public ResponseResult updateArticle(@RequestBody Article article) {
+        return articleService.updateArticle(article);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @SystemLog(businessName = "删除文章")
+    public ResponseResult deleteArticle(@PathVariable Long id) {
+        return articleService.deleteArticle(id);
     }
 }

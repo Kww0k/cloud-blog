@@ -3,6 +3,7 @@ package com.cxcacm.file.filter;
 import com.alibaba.fastjson.JSON;
 import com.cxcacm.file.entity.ResponseResult;
 import com.cxcacm.file.enums.AppHttpCodeEnum;
+import com.cxcacm.file.utils.JwtUtil;
 import com.cxcacm.file.utils.RedisCache;
 import com.cxcacm.file.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,22 +43,21 @@ public class CxcSecurityFilter extends OncePerRequestFilter {
             WebUtils.renderString(response, JSON.toJSONString(result));
             return;
         }
-//        String username;
-//        try {
-//            username = (String) JwtUtil.parseJWT(request.getHeader(AUTH_TOKEN).substring(TOKEN_START)).get(AUTH_USER);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.AUTH_EXPIRE);
-//            WebUtils.renderString(response, JSON.toJSONString(result));
-//            return;
-//        }
-//        String loginCache = username + request.getRemoteAddr();
-//        Object user = redisCache.getCacheObject(LOGIN_KEY + loginCache);
-//        if (user == null) {
-//            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
-//            WebUtils.renderString(response, JSON.toJSONString(result));
-//            return;
-//        }
+        String username;
+        try {
+            username = (String) JwtUtil.parseJWT(request.getHeader(AUTH_TOKEN).substring(TOKEN_START)).get(AUTH_USER);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.AUTH_EXPIRE);
+            WebUtils.renderString(response, JSON.toJSONString(result));
+            return;
+        }
+        Object user = redisCache.getCacheObject(LOGIN_KEY + username);
+        if (user == null) {
+            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+            WebUtils.renderString(response, JSON.toJSONString(result));
+            return;
+        }
         filterChain.doFilter(request, response);
     }
 }

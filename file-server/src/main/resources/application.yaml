@@ -1,0 +1,41 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: file-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 8.130.108.66:8848
+        username: nacos
+        password: Cxcacm1230
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/file
+    username: cxc_file
+    password: Cxcacm1230
+  redis:
+    host: 8.130.64.58
+    password: Cxcacm1230
+security:
+  oauth2:
+    client:
+      #基操
+      client-id: client
+      client-secret: secret
+    resource:
+      #因为资源服务器得验证你的Token是否有访问此资源的权限以及用户信息，所以只需要一个验证地址
+      token-info-uri: http://8.130.64.58:8080/sso/oauth/check_token
+      jwt:
+        key-value: FatCxcACMChampion
+files:
+  upload:
+    path: /home/files
+mybatis-plus:
+  global-config:
+    banner: false
+    db-config:
+      logic-delete-field: delFlag
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: auto

@@ -2,7 +2,6 @@ package com.cxcacm.user.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.cxcacm.user.entity.ResponseResult;
-import com.cxcacm.user.entity.User;
 import com.cxcacm.user.enums.AppHttpCodeEnum;
 import com.cxcacm.user.utils.JwtUtil;
 import com.cxcacm.user.utils.RedisCache;
@@ -50,8 +49,7 @@ public class CxcSecurityFilter extends OncePerRequestFilter {
                 WebUtils.renderString(response, JSON.toJSONString(result));
                 return;
             }
-            String loginCache = username + request.getRemoteAddr();
-            User user = redisCache.getCacheObject(LOGIN_KEY + loginCache);
+            Object user = redisCache.getCacheObject(LOGIN_KEY + username);
             if (user == null) {
                 ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
                 WebUtils.renderString(response, JSON.toJSONString(result));

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,55 +25,19 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final RedisCache redisCache;
-
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RedisCache redisCache) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.redisCache = redisCache;
     }
 
     @Override
-    public ResponseResult getUserInfo() {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert requestAttributes != null;
-        HttpServletRequest request = requestAttributes.getRequest();
-        String authorization = request.getHeader(AUTH_TOKEN);
-        if (authorization == null)
-            return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
-        String jwt = authorization.substring(TOKEN_START);
-        String username;
-        try {
-            username = (String) JwtUtil.parseJWT(jwt).get(AUTH_USER);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseResult.errorResult(AppHttpCodeEnum.AUTH_EXPIRE);
-        }
-        User user = userRepository.findByUsername(username);
-        String loginCache = username + request.getRemoteAddr();
-        redisCache.setCacheObject(LOGIN_KEY + loginCache, user);
-        UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
-        return ResponseResult.okResult(userInfoVo);
+    public ResponseResult setAvatar(String username, String url) {
+        User byUsername = userRepository.findByUsername(username);
+        byUsername.setUrl(url);
+        userRepository.save(byUsername);
+        return ResponseResult.okResult(url);
     }
 
-    @Override
-    public ResponseResult logout() {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert requestAttributes != null;
-        HttpServletRequest request = requestAttributes.getRequest();
-        String authorization = request.getHeader(AUTH_TOKEN);
-        if (authorization == null)
-            return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
-        String jwt = authorization.substring(TOKEN_START);
-        String username;
-        try {
-            username = (String) JwtUtil.parseJWT(jwt).get(AUTH_USER);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseResult.errorResult(AppHttpCodeEnum.AUTH_EXPIRE);
-        }
-        String loginCache = username + request.getRemoteAddr();
-        redisCache.deleteObject(LOGIN_KEY + loginCache);
-        return ResponseResult.okResult();
-    }
+
+
 }

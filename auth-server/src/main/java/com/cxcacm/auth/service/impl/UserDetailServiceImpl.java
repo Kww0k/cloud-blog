@@ -1,4 +1,4 @@
-package com.cxcacm.auth.service;
+package com.cxcacm.auth.service.impl;
 
 
 import com.cxcacm.auth.entity.LoginUser;

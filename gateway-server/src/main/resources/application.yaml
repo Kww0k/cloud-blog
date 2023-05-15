@@ -1,0 +1,28 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: gateway-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 8.130.108.66:8848
+        username: nacos
+        password: Cxcacm1230
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: article-server
+          uri: http://47.98.104.56:9090
+          predicates:
+            - Path=/tag/**
+        - id: auth-server
+          uri: http://8.130.64.58:8080
+          predicates:
+            - Path=/sso/**
+        - id: file-server
+          uri: http://8.130.84.120:8080
+          predicates:
+            - Path=/file/**
