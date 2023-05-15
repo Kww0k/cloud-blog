@@ -10,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddArticleDto {
-
     //标题
     private String title;
     //文章内容

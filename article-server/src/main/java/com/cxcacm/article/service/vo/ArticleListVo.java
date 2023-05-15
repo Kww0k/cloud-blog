@@ -17,5 +17,4 @@ public class ArticleListVo {
     private String summary;
     //缩略图
     private String thumbnail;
-
 }
