@@ -31,7 +31,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     private static String username() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert requestAttributes != null;
+        if (requestAttributes == null)
+            return "胖子";
         HttpServletRequest request = requestAttributes.getRequest();
         String authorization = request.getHeader(AUTH_TOKEN);
         if (authorization == null)

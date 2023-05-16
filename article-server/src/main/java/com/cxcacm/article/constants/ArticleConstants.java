@@ -20,5 +20,9 @@ public class ArticleConstants {
 
     public static final String LOGIN_KEY = "LOGIN_KEY:";
 
-    public static final int ARTICLE_STATUE = 0;
+    public static final String ARTICLE_STATUE = "0";
+
+    public static final String ARTICLE_STATUE_DRAFT = "1";
+
+    public static final int INCREMENT_VALUE = 1;
 }

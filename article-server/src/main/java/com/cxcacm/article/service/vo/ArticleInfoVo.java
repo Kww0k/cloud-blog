@@ -24,4 +24,5 @@ public class ArticleInfoVo {
     private String isComment;
     private Date createTime;
     private List<String> tagName;
+    private Long viewCount;
 }

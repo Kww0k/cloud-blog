@@ -12,15 +12,15 @@ import com.cxcacm.article.mapper.ArticleTagMapper;
 import com.cxcacm.article.service.ArticleService;
 import com.cxcacm.article.service.vo.*;
 import com.cxcacm.article.utils.BeanCopyUtils;
+import com.cxcacm.article.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.Map;
 
-import static com.cxcacm.article.constants.ArticleConstants.ARTICLE_STATUE;
-import static com.cxcacm.article.enums.AppHttpCodeEnum.MISSING_PARAM;
-import static com.cxcacm.article.enums.AppHttpCodeEnum.TOO_MANY_TAG;
+import static com.cxcacm.article.constants.ArticleConstants.*;
+import static com.cxcacm.article.enums.AppHttpCodeEnum.*;
 
 /**
  * 文章表(Article)表服务实现类
@@ -32,10 +32,12 @@ import static com.cxcacm.article.enums.AppHttpCodeEnum.TOO_MANY_TAG;
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
     private final ArticleTagMapper articleTagMapper;
+    private final RedisCache redisCache;
 
     @Autowired
-    public ArticleServiceImpl(ArticleTagMapper articleTagMapper) {
+    public ArticleServiceImpl(ArticleTagMapper articleTagMapper, RedisCache redisCache) {
         this.articleTagMapper = articleTagMapper;
+        this.redisCache = redisCache;
     }
 
     @Override
@@ -46,8 +48,20 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             return ResponseResult.errorResult(MISSING_PARAM);
         if (addArticleDto.getTagsList().size() > 5)
             return ResponseResult.errorResult(TOO_MANY_TAG);
+        if (addArticleDto.getContent().contains("国") ||
+                addArticleDto.getContent().contains("习近平") ||
+                addArticleDto.getContent().contains("中国") ||
+                addArticleDto.getContent().contains("陈轩丞") ||
+                addArticleDto.getTitle().contains("国") ||
+                addArticleDto.getTitle().contains("习近平") ||
+                addArticleDto.getTitle().contains("中国") ||
+                addArticleDto.getTitle().contains("陈轩丞"))
+            return ResponseResult.errorResult(SENSITIVE_WORDS);
         Article article = BeanCopyUtils.copyBean(addArticleDto, Article.class);
         save(article);
+        Map<String, Integer> viewCountMap = redisCache.getCacheMap(ARTICLE_VIEW_COUNT);
+        viewCountMap.put(article.getId().toString(), 0);
+        redisCache.setCacheMap(ARTICLE_VIEW_COUNT, viewCountMap);
         for (String tag : addArticleDto.getTagsList())
             articleTagMapper.insert(new ArticleTag(article.getId(), tag));
         return ResponseResult.okResult();
@@ -61,6 +75,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Long count = baseMapper.selectCount(null);
         Page<Article> page = page(new Page<>(pageNum, pageSize), wrapper);
         List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(page.getRecords(), ArticleListVo.class);
+        for (ArticleListVo article: articleListVos) {
+            Integer viewCount = redisCache.getCacheMapValue(ARTICLE_VIEW_COUNT, article.getId().toString());
+            article.setViewCount(viewCount.longValue());
+        }
         ArticlePageVo articlePageVo = new ArticlePageVo(articleListVos, count);
         return ResponseResult.okResult(articlePageVo);
     }
@@ -78,6 +96,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         wrapper.eq(ArticleTag::getArticleId, id);
         List<ArticleTag> articleTags = articleTagMapper.selectList(wrapper);
         Article article = baseMapper.selectById(id);
+        Integer viewCount = redisCache.getCacheMapValue(ARTICLE_VIEW_COUNT, id.toString());
+        article.setViewCount(viewCount.longValue());
         ArticleInfoVo articleInfoVo = BeanCopyUtils.copyBean(article, ArticleInfoVo.class);
         articleTags.stream()
                 .map(articleTag -> articleInfoVo.getTagName().add(articleTag.getTag()));
@@ -91,6 +111,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         wrapper.eq(Article::getStatus, ARTICLE_STATUE);
         wrapper.last("limit 10");
         List<Article> articles = baseMapper.selectList(wrapper);
+        for (Article article: articles) {
+            Integer viewCount = redisCache.getCacheMapValue(ARTICLE_VIEW_COUNT, article.getId().toString());
+            article.setViewCount(viewCount.longValue());
+        }
         List<TopTenArticleVo> topTenArticleVos = BeanCopyUtils.copyBeanList(articles, TopTenArticleVo.class);
         return ResponseResult.okResult(topTenArticleVos);
     }
@@ -99,6 +123,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public ResponseResult getSelfArticles(String username) {
         LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Article::getCreateBy, username);
+        wrapper.eq(Article::getStatus, ARTICLE_STATUE);
         wrapper.orderByDesc(Article::getIsTop).orderByDesc(Article::getViewCount).orderByDesc(Article::getCreateTime);
         List<Article> articles = baseMapper.selectList(wrapper);
         List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(articles, ArticleListVo.class);
@@ -115,5 +140,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public ResponseResult deleteArticle(Long id) {
         baseMapper.deleteById(id);
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult updateViewCount(Long id) {
+        redisCache.incrementCacheMapValue(ARTICLE_VIEW_COUNT, id.toString(), INCREMENT_VALUE);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult getSelfArticleDraft(String username) {
+        LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Article::getCreateBy, username);
+        wrapper.eq(Article::getStatus, ARTICLE_STATUE_DRAFT);
+        List<Article> articles = baseMapper.selectList(wrapper);
+        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(articles, ArticleListVo.class);
+        return ResponseResult.okResult(articleListVos);
     }
 }

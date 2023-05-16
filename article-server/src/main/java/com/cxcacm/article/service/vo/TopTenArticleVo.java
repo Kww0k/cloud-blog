@@ -11,5 +11,5 @@ public class TopTenArticleVo {
     private Long id;
     //标题
     private String title;
-
+    private Long viewCount;
 }

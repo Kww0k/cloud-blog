@@ -15,4 +15,5 @@ public class TopFourArticleVo {
     private String summary;
     //缩略图
     private String thumbnail;
+
 }

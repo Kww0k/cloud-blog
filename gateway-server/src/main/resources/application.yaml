@@ -15,9 +15,21 @@ spring:
           enabled: true
       routes:
         - id: article-server
-          uri: http://47.98.104.56:9090
+          uri: http://8.130.111.239:8080
+          predicates:
+            - Path=/article/**
+        - id: article-server
+          uri: http://8.130.111.239:8080
           predicates:
             - Path=/tag/**
+        - id: article-server
+          uri: http://8.130.111.239:8080
+          predicates:
+            - Path=/collection/**
+        - id: article-server
+          uri: http://8.130.111.239:8080
+          predicates:
+            - Path=/like/**
         - id: auth-server
           uri: http://8.130.64.58:8080
           predicates:
