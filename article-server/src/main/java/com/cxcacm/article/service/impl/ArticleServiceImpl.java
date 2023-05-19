@@ -147,19 +147,24 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (requestAttributes != null) {
             HttpServletRequest request = requestAttributes.getRequest();
-            String username;
-            try {
-                username = (String) JwtUtil.parseJWT(request.getHeader(AUTH_TOKEN).substring(TOKEN_START)).get(AUTH_USER);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return ResponseResult.errorResult(AppHttpCodeEnum.AUTH_EXPIRE);
+            if (request.getHeader(AUTH_TOKEN) != null) {
+                String username;
+                try {
+                    username = (String) JwtUtil.parseJWT(request.getHeader(AUTH_TOKEN).substring(TOKEN_START)).get(AUTH_USER);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return ResponseResult.errorResult(AppHttpCodeEnum.AUTH_EXPIRE);
+                }
+                articleCollectionLambdaQueryWrapper.eq(ArticleCollection::getUsername, username);
+                Long isCollection = articleCollectionMapper.selectCount(articleCollectionLambdaQueryWrapper);
+                articleInfoVo.setCollection(isCollection > 0);
+                articleLikeLambdaQueryWrapper.eq(ArticleLike::getUsername, username);
+                Long isLike = articleLikeMapper.selectCount(articleLikeLambdaQueryWrapper);
+                articleInfoVo.setLike(isLike > 0);
+            } else {
+                articleInfoVo.setLike(false);
+                articleInfoVo.setCollection(false);
             }
-            articleCollectionLambdaQueryWrapper.eq(ArticleCollection::getUsername, username);
-            Long isCollection = articleCollectionMapper.selectCount(articleCollectionLambdaQueryWrapper);
-            articleInfoVo.setCollection(isCollection > 0);
-            articleLikeLambdaQueryWrapper.eq(ArticleLike::getUsername, username);
-            Long isLike = articleLikeMapper.selectCount(articleLikeLambdaQueryWrapper);
-            articleInfoVo.setLike(isLike > 0);
         } else {
             articleInfoVo.setLike(false);
             articleInfoVo.setCollection(false);
