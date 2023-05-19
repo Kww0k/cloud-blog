@@ -20,9 +20,15 @@ public class ArticleInfoVo {
     private String summary;
     //缩略图
     private String thumbnail;
+    private String isTop;
+    private String status;
     //是否允许评论 1是，0否
     private String isComment;
     private Date createTime;
-    private List<String> tagName;
+    private List<String> tagList;
     private Long viewCount;
+    private Long likeCount;
+    private Long collectionCount;
+    private boolean like;
+    private boolean collection;
 }

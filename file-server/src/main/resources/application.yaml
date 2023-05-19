@@ -3,12 +3,6 @@ server:
 spring:
   application:
     name: file-server
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 8.130.108.66:8848
-        username: nacos
-        password: Cxcacm1230
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/file

@@ -2,7 +2,7 @@ package com.cxcacm.article.controller;
 
 import com.cxcacm.article.annotation.SystemLog;
 import com.cxcacm.article.controller.dto.AddArticleDto;
-import com.cxcacm.article.entity.Article;
+import com.cxcacm.article.controller.dto.UpdateArticleDto;
 import com.cxcacm.article.entity.ResponseResult;
 import com.cxcacm.article.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +63,8 @@ public class ArticleController {
 
     @PostMapping("/updateArticle")
     @SystemLog(businessName = "更新文章信息")
-    public ResponseResult updateArticle(@RequestBody Article article) {
-        return articleService.updateArticle(article);
+    public ResponseResult updateArticle(@RequestBody UpdateArticleDto updateArticleDto) {
+        return articleService.updateArticle(updateArticleDto);
     }
 
     @DeleteMapping("/delete/{id}")

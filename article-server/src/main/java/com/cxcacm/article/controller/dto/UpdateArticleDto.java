@@ -1,4 +1,4 @@
-package com.cxcacm.article.service.vo;
+package com.cxcacm.article.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ArticleListVo {
+public class UpdateArticleDto {
     private Long id;
     //标题
     private String title;
@@ -19,9 +19,14 @@ public class ArticleListVo {
     private String summary;
     //缩略图
     private String thumbnail;
+    //是否置顶（0否，1是）
+    private String isTop;
+    //状态（0已发布，1草稿）
+    private String status;
+    //访问量
     private Long viewCount;
-    private Long likeCount;
-    private Long collectionCount;
-    private Long commentCount;
-    private List<String> tagList;
+    //是否允许评论 1是，0否
+    private String isComment;
+
+    private List<String> tagsList;
 }

@@ -17,6 +17,6 @@ import java.util.List;
 @Mapper
 public interface ArticleMapper extends BaseMapper<Article> {
 
-    @Select("select ca.* from cxc_article ca left join article_tag at on ca.id = at.article_id where at.tag = #{tagName}")
+    @Select("select ca.* from cxc_article ca left join article_tag at on ca.id = at.article_id where at.tag = #{tagName} and ca.status = 0 and ca.del_flag = 0")
     List<Article> getTopFourArticles(String tagName);
 }

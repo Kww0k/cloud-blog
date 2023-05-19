@@ -25,4 +25,6 @@ public class ArticleConstants {
     public static final String ARTICLE_STATUE_DRAFT = "1";
 
     public static final int INCREMENT_VALUE = 1;
+
+    public static final long ROOT_ID = -1;
 }

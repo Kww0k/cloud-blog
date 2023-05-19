@@ -23,8 +23,4 @@ public class ArticleLike  {
     private String username;
     //文章id@TableId
     private Long articleId;
-
-
-
-
 }

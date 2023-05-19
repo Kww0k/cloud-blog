@@ -2,6 +2,7 @@ package com.cxcacm.article.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cxcacm.article.controller.dto.AddArticleDto;
+import com.cxcacm.article.controller.dto.UpdateArticleDto;
 import com.cxcacm.article.entity.Article;
 import com.cxcacm.article.entity.ResponseResult;
 
@@ -26,11 +27,12 @@ public interface ArticleService extends IService<Article> {
 
     ResponseResult getSelfArticles(String username);
 
-    ResponseResult updateArticle(Article article);
+    ResponseResult updateArticle(UpdateArticleDto article);
 
     ResponseResult deleteArticle(Long id);
 
     ResponseResult updateViewCount(Long id);
 
     ResponseResult getSelfArticleDraft(String username);
+
 }

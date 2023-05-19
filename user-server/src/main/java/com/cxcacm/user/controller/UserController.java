@@ -19,8 +19,10 @@ public class UserController {
 
     @GetMapping("/setAvatar")
     @SystemLog(businessName = "设置用户头像")
-    public ResponseResult serAvatar(@RequestParam String username, @RequestParam String url) {
+    public ResponseResult serAvatar(String username, String url) {
         return userService.setAvatar(username, url);
     }
+
+
 
 }
