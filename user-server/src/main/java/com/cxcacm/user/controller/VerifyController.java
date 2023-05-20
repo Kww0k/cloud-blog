@@ -1,5 +1,6 @@
 package com.cxcacm.user.controller;
 
+import com.cxcacm.user.annotation.SystemLog;
 import com.cxcacm.user.controller.Dto.RegisterDto;
 import com.cxcacm.user.entity.ResponseResult;
 import com.cxcacm.user.service.VerifyService;
@@ -17,12 +18,14 @@ public class VerifyController {
         this.verifyService = verifyService;
     }
 
-    @GetMapping("/getVerify")
+    @GetMapping("/api/getVerify")
+    @SystemLog(businessName = "获取验证码")
     public ResponseResult getVerify(@RequestParam String email) {
         return verifyService.getVerify(email);
     }
 
-    @PostMapping("/doRegister")
+    @PostMapping("/api/doRegister")
+    @SystemLog(businessName = "注册用户")
     public ResponseResult doRegister(@RequestBody RegisterDto registerDto) {
         return verifyService.doRegister(registerDto);
     }

@@ -1,9 +1,10 @@
 package com.cxcacm.user.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cxcacm.user.controller.Dto.RegisterDto;
 import com.cxcacm.user.entity.ResponseResult;
 import com.cxcacm.user.entity.User;
-import com.cxcacm.user.repo.UserRepository;
+import com.cxcacm.user.mapper.UserMapper;
 import com.cxcacm.user.service.VerifyService;
 import com.cxcacm.user.utils.BeanCopyUtils;
 import com.cxcacm.user.utils.RedisCache;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 import static com.cxcacm.user.constants.UserConstants.VERIFY;
 import static com.cxcacm.user.enums.AppHttpCodeEnum.*;
@@ -23,12 +25,12 @@ import static com.cxcacm.user.enums.AppHttpCodeEnum.*;
 @Service
 public class VerifyServiceImpl implements VerifyService {
 
-    private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final JavaMailSender javaMailSender;
     private final RedisCache redisCache;
     @Autowired
-    public VerifyServiceImpl(UserRepository userRepository, JavaMailSender javaMailSender, RedisCache redisCache) {
-        this.userRepository = userRepository;
+    public VerifyServiceImpl(UserMapper userMapper, JavaMailSender javaMailSender, RedisCache redisCache) {
+        this.userMapper = userMapper;
         this.javaMailSender = javaMailSender;
         this.redisCache = redisCache;
     }
@@ -41,8 +43,12 @@ public class VerifyServiceImpl implements VerifyService {
         Object cacheObject = redisCache.getCacheObject(VERIFY + email);
         if (cacheObject != null)
             return ResponseResult.errorResult(HAVA_CODE);
-        User userByEmail = userRepository.findUserByEmail(email);
-        if (userByEmail == null)
+        if (!Pattern.matches("^(\\w+([-.][A-Za-z0-9]+)*){3,18}@\\w+([-.][A-Za-z0-9]+)*\\.\\w+([-.][A-Za-z0-9]+)*$", email))
+            return ResponseResult.errorResult(EMAIL_FALSE);
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getEmail, email);
+        User userByEmail = userMapper.selectOne(wrapper);
+        if (userByEmail != null)
             return ResponseResult.errorResult(HAVE_BEEN_REGISTER);
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject("【猪猪论坛】");
@@ -57,7 +63,7 @@ public class VerifyServiceImpl implements VerifyService {
                 "\n" +
                 "在进行注册之前，我们需要您验证您的电子邮箱以确认您的身份。请在下方输入验证码，以完成注册：\n" +
                 "\n" +
-                "验证码：" + code + "\n" +
+                "验证码：" + code + "(有效期为5分钟)" + "\n" +
                 "\n" +
                 "我们非常重视您的隐私和安全，因此，我们承诺在您注册完成之后，不会非法地、滥用地使用您的个人信息。同时，我们也会为您提供一个安全、稳定的环境，确保您的账户能够得到有效的保护。\n" +
                 "\n" +
@@ -86,7 +92,7 @@ public class VerifyServiceImpl implements VerifyService {
         if (!Objects.equals(code, registerDto.getCode()))
             return ResponseResult.errorResult(CODE_ERROR);
         User user = BeanCopyUtils.copyBean(registerDto, User.class);
-        userRepository.save(user);
+        userMapper.insert(user);
         return ResponseResult.okResult();
     }
 }

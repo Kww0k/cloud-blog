@@ -1,39 +1,50 @@
 package com.cxcacm.user.entity;
 
-import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
+import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+/**
+ * 用户信息表(User)表实体类
+ *
+ * @author makejava
+ * @since 2023-05-21 00:34:04
+ */
+@SuppressWarnings("serial")
 @Data
-@Entity
-@EntityListeners(AuditingEntityListener.class)
-@Table(name = "oauth_user")
-public class User {
-    @Id
+@AllArgsConstructor
+@NoArgsConstructor
+@TableName("oauth_user")
+public class User  {
+    //用户id
+    @TableId
     private Long id;
-
+    //用户名
     private String username;
-
+    //密码
     private String password;
-
+    //昵称
     private String nickname;
-
+    //性别
     private String sex;
-
+    //邮箱
     private String email;
-    private String createBy;
-    @CreatedDate
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
-    private String updateBy;
-    @LastModifiedDate
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
+    //删除标志（0代表未删除，1代表已删除）
     private Integer delFlag;
+    //头像地址
     private String url;
+
+
+
 }

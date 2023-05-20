@@ -18,4 +18,11 @@ public class UserConstants {
     public static final String LOGIN_KEY = "LOGIN_KEY:";
 
     public static final String VERIFY = "verify:code";
+
+    public static final String URL_INFO = "URL_INFO:";
+
+    public static final String USER_ID = "id";
+    public static final String USER_NICKNAME = "nickname";
+    public static final String USER_URL = "url";
+
 }

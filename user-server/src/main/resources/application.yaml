@@ -7,18 +7,22 @@ spring:
     host: smtp.163.com
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/oauth
+    url: jdbc:mysql://8.130.64.58:3306/oauth
     username: cxc_oauth
     password: Cxcacm1230
   redis:
-    host: localhost
+    host: 8.130.64.58
     password: Cxcacm1230
-  jpa:
-    hibernate:
-      ddl-auto: update
-    database: mysql
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: delFlag
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: auto
+    banner: false
 server:
-  port: 9090
+  port: 8080
 security:
   oauth2:
     client:

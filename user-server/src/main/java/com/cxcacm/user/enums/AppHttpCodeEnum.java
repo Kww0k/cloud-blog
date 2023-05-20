@@ -11,7 +11,11 @@ public enum AppHttpCodeEnum {
     MISSING_PARAM(409, "缺少必要参数"),
     PASSWORD_DIFFERENT(401, "两次输入的密码不同"),
     CODE_ERROR(403, "验证码错误"),
-    HAVA_CODE(403, "在5分钟内不能发送第二次验证码");
+    HAVA_CODE(403, "在5分钟内不能发送第二次验证码"),
+    EMAIL_FALSE(403, "邮箱格式错误"),
+    PASSWORD_ERROR(403, "密码不匹配"),
+    URL_NULL(404, "空的头像地址"),
+    USER_NULL(404, "用户不存在");
 
 
 

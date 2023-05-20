@@ -39,22 +39,24 @@ public class CxcSecurityFilter extends OncePerRequestFilter {
             WebUtils.renderString(response, JSON.toJSONString(result));
             return;
         }
-        if (!Objects.equals(new URL(request.getRequestURL().toString()).getPath(), "/user/userInfo")) {
-            String username;
-            try {
-                username = (String) JwtUtil.parseJWT(request.getHeader(AUTH_TOKEN).substring(TOKEN_START)).get(AUTH_USER);
-            } catch (Exception e) {
-                e.printStackTrace();
-                ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.AUTH_EXPIRE);
-                WebUtils.renderString(response, JSON.toJSONString(result));
-                return;
-            }
-            Object user = redisCache.getCacheObject(LOGIN_KEY + username);
-            if (user == null) {
-                ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
-                WebUtils.renderString(response, JSON.toJSONString(result));
-                return;
-            }
+        if (request.getRequestURL().toString().contains("/verify/api/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        String username;
+        try {
+            username = (String) JwtUtil.parseJWT(request.getHeader(AUTH_TOKEN).substring(TOKEN_START)).get(AUTH_USER);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.AUTH_EXPIRE);
+            WebUtils.renderString(response, JSON.toJSONString(result));
+            return;
+        }
+        Object user = redisCache.getCacheObject(LOGIN_KEY + username);
+        if (user == null) {
+            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+            WebUtils.renderString(response, JSON.toJSONString(result));
+            return;
         }
         filterChain.doFilter(request, response);
     }
