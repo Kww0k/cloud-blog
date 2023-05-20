@@ -16,6 +16,10 @@ spring:
         - id: article-server
           uri: http://8.130.111.239:8080
           predicates:
+            - Path=/comment/**
+        - id: article-server
+          uri: http://8.130.111.239:8080
+          predicates:
             - Path=/tag/**
         - id: article-server
           uri: http://8.130.111.239:8080

@@ -19,6 +19,8 @@ public class CommentVo {
     //评论内容
     private String content;
 
+    private String commentTo;
+
     private Date createTime;
 
     private String createBy;

@@ -31,12 +31,9 @@ public class User {
     private String createBy;
     @CreatedDate
     private Date createTime;
-
     private String updateBy;
     @LastModifiedDate
     private Date updateTime;
-
     private Integer delFlag;
-
     private String url;
 }

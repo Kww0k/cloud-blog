@@ -13,4 +13,6 @@ public class AddCommentDto {
     private Long rootId;
     //评论内容
     private String content;
+
+    private String commentTo;
 }
