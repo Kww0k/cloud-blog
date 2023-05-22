@@ -20,9 +20,7 @@ public class User {
     private String nickname;
     private String sex;
     private String email;
-    private String createBy;
     private Date createTime;
-    private String updateBy;
     private Date updateTime;
     private Integer delFlag;
     private String url;

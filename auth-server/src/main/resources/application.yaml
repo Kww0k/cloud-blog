@@ -3,11 +3,11 @@ spring:
     name: auth-server
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/oauth
+    url: jdbc:mysql://8.130.64.58:3306/oauth
     username: cxc_oauth
     password: Cxcacm1230
   redis:
-    host: localhost
+    host: 8.130.64.58
     password: Cxcacm1230
   jpa:
     hibernate:

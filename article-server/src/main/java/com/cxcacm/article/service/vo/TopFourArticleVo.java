@@ -11,6 +11,7 @@ public class TopFourArticleVo {
     private Long id;
     //标题
     private String title;
+    private String createBy;
     //文章摘要
     private String summary;
     //缩略图

@@ -37,7 +37,7 @@ public class UserController {
         return userService.changeInfo(changeInfoDto);
     }
 
-    @GetMapping("/getInfoByName")
+    @GetMapping("/api/getInfoByName")
     @SystemLog(businessName = "通过用户名获取信息")
     public ResponseResult getInfoByName(String username) {
         return userService.getInfoByName(username);

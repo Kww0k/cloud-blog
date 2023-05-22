@@ -19,10 +19,11 @@ public class UserConstants {
 
     public static final String VERIFY = "verify:code";
 
-    public static final String URL_INFO = "URL_INFO:";
-
+    public static final String USER_INFO = "user_info:";
     public static final String USER_ID = "id";
     public static final String USER_NICKNAME = "nickname";
     public static final String USER_URL = "url";
+
+    public static final String CREATE_TIME = "createTime";
 
 }

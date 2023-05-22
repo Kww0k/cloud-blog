@@ -17,7 +17,7 @@ public interface ArticleService extends IService<Article> {
 
     ResponseResult addArticle(AddArticleDto addArticleDto);
 
-    ResponseResult getArticleList(Integer pageNum, Integer pageSize);
+    ResponseResult getArticleList();
 
     ResponseResult getTopFourArticles(String tagName);
 
@@ -35,4 +35,5 @@ public interface ArticleService extends IService<Article> {
 
     ResponseResult getSelfArticleDraft(String username);
 
+    ResponseResult userInfo(String username);
 }

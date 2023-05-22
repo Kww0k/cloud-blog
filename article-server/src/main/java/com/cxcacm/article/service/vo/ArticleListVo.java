@@ -19,6 +19,7 @@ public class ArticleListVo {
     private String summary;
     //缩略图
     private String thumbnail;
+    private String createBy;
     private Long viewCount;
     private Long likeCount;
     private Long collectionCount;

@@ -1,4 +1,4 @@
-package com.cxcacm.user.service.vo;
+package com.cxcacm.auth.service.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,10 @@ import java.util.Date;
 @NoArgsConstructor
 public class UrlInfoVo {
     private Long id;
+
     private String nickname;
+
     private String url;
-    private String createTime;
+
+    private Date createTime;
 }

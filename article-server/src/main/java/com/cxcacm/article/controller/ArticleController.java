@@ -27,8 +27,8 @@ public class ArticleController {
 
     @GetMapping("/api/getArticlePage")
     @SystemLog(businessName = "分页获取文章列表")
-    public ResponseResult getArticleList(Integer pageNum, Integer pageSize) {
-        return articleService.getArticleList(pageNum, pageSize);
+    public ResponseResult getArticleList() {
+        return articleService.getArticleList();
     }
 
     @GetMapping("/api/getTopFourArticles")
@@ -77,5 +77,11 @@ public class ArticleController {
     @SystemLog(businessName = "更新浏览量")
     public ResponseResult updateViewCount(@PathVariable Long id) {
         return articleService.updateViewCount(id);
+    }
+
+    @GetMapping("/api/userInfo")
+    @SystemLog(businessName = "获取个人信息")
+    public ResponseResult userInfo(String username) {
+        return articleService.userInfo(username);
     }
 }

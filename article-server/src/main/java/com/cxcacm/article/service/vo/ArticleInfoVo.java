@@ -24,6 +24,7 @@ public class ArticleInfoVo {
     private String status;
     //是否允许评论 1是，0否
     private String isComment;
+    private String createBy;
     private Date createTime;
     private List<String> tagList;
     private Long viewCount;

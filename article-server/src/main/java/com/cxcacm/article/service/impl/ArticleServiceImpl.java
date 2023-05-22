@@ -1,6 +1,7 @@
 package com.cxcacm.article.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -81,13 +82,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public ResponseResult getArticleList(Integer pageNum, Integer pageSize) {
+    public ResponseResult getArticleList() {
         LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
         wrapper.orderByDesc(Article::getId);
         wrapper.eq(Article::getStatus, ARTICLE_STATUE);
         Long count = baseMapper.selectCount(wrapper);
-        Page<Article> page = page(new Page<>(pageNum, pageSize), wrapper);
-        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(page.getRecords(), ArticleListVo.class);
+        List<Article> articles = baseMapper.selectList(wrapper);
+        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(articles, ArticleListVo.class);
         for (ArticleListVo article : articleListVos) {
             Integer viewCount = redisCache.getCacheMapValue(ARTICLE_VIEW_COUNT, article.getId().toString());
             article.setViewCount(viewCount.longValue());
@@ -249,6 +250,33 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<Article> articles = baseMapper.selectList(wrapper);
         List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(articles, ArticleListVo.class);
         return ResponseResult.okResult(articleListVos);
+    }
+
+    @Override
+    public ResponseResult userInfo(String username) {
+        Object cacheObject = redisCache.getCacheObject(USER_INFO + username);
+        Long id = ((Integer) ((JSONObject) cacheObject).get(USER_ID)).longValue();
+        String nickname = (String) ((JSONObject) cacheObject).get(USER_NICKNAME);
+        String url = (String) ((JSONObject) cacheObject).get(USER_URL);
+        String createTime = ((JSONObject) cacheObject).get(CREATE_TIME).toString();
+        LambdaQueryWrapper<ArticleLike> articleLikeLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        articleLikeLambdaQueryWrapper.eq(ArticleLike::getUsername, username);
+        Long like = articleLikeMapper.selectCount(articleLikeLambdaQueryWrapper);
+        LambdaQueryWrapper<ArticleCollection> articleCollectionLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        articleCollectionLambdaQueryWrapper.eq(ArticleCollection::getUsername, username);
+        Long collection = articleCollectionMapper.selectCount(articleCollectionLambdaQueryWrapper);
+        LambdaQueryWrapper<Comment> commentLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        commentLambdaQueryWrapper.eq(Comment::getCreateBy, username);
+        Long comment = commentMapper.selectCount(commentLambdaQueryWrapper);
+        LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Article::getCreateBy, username);
+        List<Article> articles = baseMapper.selectList(wrapper);
+        Long viewCount = 0L;
+        for (Article article : articles)
+            viewCount += article.getViewCount();
+        UserInfoVo userInfoVo = new UserInfoVo(id, nickname, url, createTime, viewCount, like, comment, collection);
+        redisCache.setCacheObject(USER_INFO + username, userInfoVo);
+        return ResponseResult.okResult(userInfoVo);
     }
 
 

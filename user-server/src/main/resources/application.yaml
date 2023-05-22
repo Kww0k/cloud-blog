@@ -5,6 +5,15 @@ spring:
     username: E19858591692@163.com
     password: ILMWDPNGFMTVJUEG
     host: smtp.163.com
+    port: 465
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+            socketFactory:
+              port: 465
+              class: javax.net.ssl.SSLSocketFactory
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://8.130.64.58:3306/oauth

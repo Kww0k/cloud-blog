@@ -5,6 +5,7 @@ import com.cxcacm.auth.entity.User;
 import com.cxcacm.auth.repo.UserRepository;
 import com.cxcacm.auth.service.AuthService;
 import com.cxcacm.auth.service.vo.TokenVo;
+import com.cxcacm.auth.service.vo.UrlInfoVo;
 import com.cxcacm.auth.service.vo.UserInfoVo;
 import com.cxcacm.auth.utils.BeanCopyUtils;
 import com.cxcacm.auth.utils.JwtUtil;
@@ -43,9 +44,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseResult token(Principal principal, Map<String, String> parameters) {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert requestAttributes != null;
-        HttpServletRequest request = requestAttributes.getRequest();
         //调用自带的获取token方法。
         OAuth2AccessToken resultToken;
         try {
@@ -57,8 +55,10 @@ public class AuthServiceImpl implements AuthService {
             String username = (String) JwtUtil.parseJWT(resultToken.getValue()).get(AUTH_USER);
             User user = userRepository.findByUsername(username);
             UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
+            UrlInfoVo urlInfoVo = BeanCopyUtils.copyBean(user, UrlInfoVo.class);
             TokenVo tokenVo = new TokenVo(resultToken.getValue(), resultToken.getRefreshToken().getValue(), "bearer ", resultToken.getExpiresIn(), userInfoVo);
-            redisCache.setCacheObject(LOGIN_KEY + username, user);
+            redisCache.setCacheObject(LOGIN_KEY + username, username);
+            redisCache.setCacheObject(USER_INFO + username, urlInfoVo);
             return ResponseResult.okResult(tokenVo);
         }
         return ResponseResult.errorResult(SYSTEM_ERROR);

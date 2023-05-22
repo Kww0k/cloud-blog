@@ -1,17 +1,19 @@
-package com.cxcacm.user.service.vo;
+package com.cxcacm.article.service.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UrlInfoVo {
+public class UserInfoVo {
     private Long id;
     private String nickname;
     private String url;
     private String createTime;
+    private Long viewCount;
+    private Long like;
+    private Long comment;
+    private Long collection;
 }

@@ -10,11 +10,11 @@ spring:
           enabled: true
       routes:
         - id: user-server
-          uri: http://8.130.111.239:8080
+          uri: http://8.130.9.160:8080
           predicates:
             - Path=/user/**
         - id: user-server
-          uri: http://8.130.111.239:8080
+          uri: http://8.130.9.160:8080
           predicates:
             - Path=/verify/**
         - id: article-server
