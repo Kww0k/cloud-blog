@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: community-server
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://8.130.64.58:3306/oauth
+    username: cxc_oauth
+    password: Cxcacm1230
+  redis:
+    host: 8.130.64.58
+    password: Cxcacm1230
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: delFlag
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: auto
+    banner: false
+server:
+  port: 8080
+security:
+  oauth2:
+    client:
+      #基操
+      client-id: client
+      client-secret: secret
+    resource:
+      #因为资源服务器得验证你的Token是否有访问此资源的权限以及用户信息，所以只需要一个验证地址
+      token-info-uri: http://8.130.64.58:8080/sso/oauth/check_token
+      jwt:
+        key-value: FatCxcACMChampion

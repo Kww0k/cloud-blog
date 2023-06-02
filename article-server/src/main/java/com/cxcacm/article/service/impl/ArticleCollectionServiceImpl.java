@@ -13,8 +13,10 @@ import com.cxcacm.article.service.vo.ArticleListVo;
 import com.cxcacm.article.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.cxcacm.article.enums.AppHttpCodeEnum.SYSTEM_ERROR;
 
@@ -37,7 +39,7 @@ public class ArticleCollectionServiceImpl extends ServiceImpl<ArticleCollectionM
 
     @Override
     public ResponseResult giveCollection(GiveLikeDto giveLikeDto) {
-        if (giveLikeDto.getUsername() == null || giveLikeDto.getId() == null)
+        if (!StringUtils.hasText(giveLikeDto.getUsername()) || !StringUtils.hasText(String.valueOf(giveLikeDto.getId())))
             return ResponseResult.errorResult(SYSTEM_ERROR);
         save(new ArticleCollection(giveLikeDto.getUsername(), giveLikeDto.getId()));
         return ResponseResult.okResult();
@@ -45,7 +47,7 @@ public class ArticleCollectionServiceImpl extends ServiceImpl<ArticleCollectionM
 
     @Override
     public ResponseResult deleteCollection(GiveLikeDto giveLikeDto) {
-        if (giveLikeDto.getUsername() == null || giveLikeDto.getId() == null)
+        if (!StringUtils.hasText(giveLikeDto.getUsername()) || !StringUtils.hasText(String.valueOf(giveLikeDto.getId())))
             return ResponseResult.errorResult(SYSTEM_ERROR);
         LambdaQueryWrapper<ArticleCollection> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ArticleCollection::getArticleId, giveLikeDto.getId());

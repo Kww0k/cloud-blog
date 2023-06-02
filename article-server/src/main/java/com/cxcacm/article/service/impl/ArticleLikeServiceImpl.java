@@ -13,6 +13,7 @@ import com.cxcacm.article.service.vo.ArticleListVo;
 import com.cxcacm.article.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class ArticleLikeServiceImpl extends ServiceImpl<ArticleLikeMapper, Artic
 
     @Override
     public ResponseResult giveLike(GiveLikeDto giveLikeDto) {
-        if (giveLikeDto.getUsername() == null || giveLikeDto.getId() == null)
+        if (!StringUtils.hasText(giveLikeDto.getUsername()) || !StringUtils.hasText(String.valueOf(giveLikeDto.getId())))
             return ResponseResult.errorResult(SYSTEM_ERROR);
         save(new ArticleLike(giveLikeDto.getUsername(), giveLikeDto.getId()));
         return ResponseResult.okResult();
@@ -44,7 +45,7 @@ public class ArticleLikeServiceImpl extends ServiceImpl<ArticleLikeMapper, Artic
 
     @Override
     public ResponseResult deleteLike(GiveLikeDto giveLikeDto) {
-        if (giveLikeDto.getUsername() == null || giveLikeDto.getId() == null)
+        if (!StringUtils.hasText(giveLikeDto.getUsername()) || !StringUtils.hasText(String.valueOf(giveLikeDto.getId())))
             return ResponseResult.errorResult(SYSTEM_ERROR);
         LambdaQueryWrapper<ArticleLike> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ArticleLike::getArticleId, giveLikeDto.getId());

@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 import java.util.Random;
@@ -33,6 +35,10 @@ public class VerifyServiceImpl implements VerifyService {
         this.userMapper = userMapper;
         this.javaMailSender = javaMailSender;
         this.redisCache = redisCache;
+    }
+
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Value("${spring.mail.username}")
@@ -82,16 +88,21 @@ public class VerifyServiceImpl implements VerifyService {
 
     @Override
     public ResponseResult doRegister(RegisterDto registerDto) {
-        if (registerDto.getUsername() == null || registerDto.getPassword() == null ||
-                registerDto.getCode() == null || registerDto.getConfirmPassword() == null ||
-                registerDto.getEmail() == null)
+        if (!StringUtils.hasText(registerDto.getUsername()) || !StringUtils.hasText(registerDto.getPassword()) ||
+                !StringUtils.hasText(registerDto.getCode()) || !StringUtils.hasText(registerDto.getConfirmPassword()) ||
+                !StringUtils.hasText(registerDto.getEmail()))
             return ResponseResult.errorResult(MISSING_PARAM);
+        if (registerDto.getPassword().length() > 18 || registerDto.getPassword().length() < 6)
+            return ResponseResult.errorResult(PASSWORD_LENGTH);
         if (!Objects.equals(registerDto.getConfirmPassword(), registerDto.getPassword()))
             return ResponseResult.errorResult(PASSWORD_DIFFERENT);
+        if (registerDto.getUsername().length() > 18 || registerDto.getUsername().length() < 3)
+            return ResponseResult.errorResult(USERNAME_LENGTH);
         String code = redisCache.getCacheObject(VERIFY + registerDto.getEmail());
         if (!Objects.equals(code, registerDto.getCode()))
             return ResponseResult.errorResult(CODE_ERROR);
         User user = BeanCopyUtils.copyBean(registerDto, User.class);
+        user.setPassword(bCryptPasswordEncoder().encode(registerDto.getPassword()));
         userMapper.insert(user);
         return ResponseResult.okResult();
     }

@@ -38,6 +38,8 @@ public class Comment  {
     //删除标志（0代表未删除，1代表已删除）
     private Integer delFlag;
     private String commentTo;
-
-
+    @TableField(exist = false)
+    private String nickname;
+    @TableField(exist = false)
+    private String url;
 }

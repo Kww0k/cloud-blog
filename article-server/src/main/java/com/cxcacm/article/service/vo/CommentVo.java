@@ -19,6 +19,10 @@ public class CommentVo {
     //评论内容
     private String content;
 
+    private String nickname;
+
+    private String url;
+
     private String commentTo;
 
     private Date createTime;

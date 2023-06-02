@@ -15,7 +15,9 @@ public enum AppHttpCodeEnum {
     EMAIL_FALSE(403, "邮箱格式错误"),
     PASSWORD_ERROR(403, "密码不匹配"),
     URL_NULL(404, "空的头像地址"),
-    USER_NULL(404, "用户不存在");
+    USER_NULL(404, "用户不存在"),
+    USERNAME_LENGTH(403, "用户名长度不能小于3或大于18"),
+    PASSWORD_LENGTH(403, "密码长度不能小于3或大于18");
 
 
 

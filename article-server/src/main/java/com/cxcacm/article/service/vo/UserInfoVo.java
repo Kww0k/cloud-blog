@@ -16,4 +16,5 @@ public class UserInfoVo {
     private Long like;
     private Long comment;
     private Long collection;
+    private Long articleCount;
 }

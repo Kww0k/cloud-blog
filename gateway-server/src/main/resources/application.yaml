@@ -9,6 +9,10 @@ spring:
         locator:
           enabled: true
       routes:
+        - id: event-server
+          uri: http://8.130.54.207:8080
+          predicates:
+            - Path=/event/**
         - id: user-server
           uri: http://8.130.9.160:8080
           predicates:

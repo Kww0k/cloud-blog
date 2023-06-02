@@ -1,9 +1,7 @@
 package com.cxcacm.article.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cxcacm.article.controller.dto.AddArticleDto;
 import com.cxcacm.article.controller.dto.UpdateArticleDto;
@@ -15,9 +13,10 @@ import com.cxcacm.article.service.vo.*;
 import com.cxcacm.article.utils.BeanCopyUtils;
 import com.cxcacm.article.utils.JwtUtil;
 import com.cxcacm.article.utils.RedisCache;
-import com.cxcacm.article.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -56,9 +55,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public ResponseResult addArticle(AddArticleDto addArticleDto) {
-        if (addArticleDto.getContent() == null || addArticleDto.getSummary() == null ||
-                addArticleDto.getTitle() == null || addArticleDto.getThumbnail() == null ||
-                addArticleDto.getTagsList() == null || addArticleDto.getIsComment() == null)
+        if (!StringUtils.hasText(addArticleDto.getContent()) || !StringUtils.hasText(addArticleDto.getSummary()) ||
+                !StringUtils.hasText(addArticleDto.getTitle()) || !StringUtils.hasText(addArticleDto.getThumbnail()) ||
+                CollectionUtils.isEmpty(addArticleDto.getTagsList()) || !StringUtils.hasText(addArticleDto.getIsComment()))
             return ResponseResult.errorResult(MISSING_PARAM);
         if (addArticleDto.getTagsList().size() > 5)
             return ResponseResult.errorResult(TOO_MANY_TAG);
@@ -201,10 +200,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public ResponseResult updateArticle(UpdateArticleDto updateArticleDto) {
-        if (updateArticleDto.getId() == null) return ResponseResult.errorResult(MISSING_PARAM);
-        if (updateArticleDto.getTagsList() != null && updateArticleDto.getTagsList().size() > 5)
+        if (!StringUtils.hasText(updateArticleDto.getId().toString())) return ResponseResult.errorResult(MISSING_PARAM);
+        if (!CollectionUtils.isEmpty(updateArticleDto.getTagsList()) && updateArticleDto.getTagsList().size() > 5)
             return ResponseResult.errorResult(TOO_MANY_TAG);
-        if (updateArticleDto.getTitle() != null && updateArticleDto.getContent() != null) {
+        if (StringUtils.hasText(updateArticleDto.getTitle())  && StringUtils.hasText(updateArticleDto.getContent())) {
             if (Objects.requireNonNull(updateArticleDto.getContent()).contains("习近平") ||
                     updateArticleDto.getContent().contains("国") ||
                     updateArticleDto.getContent().contains("中国") ||
@@ -215,7 +214,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                     updateArticleDto.getTitle().contains("陈轩丞"))
                 return ResponseResult.errorResult(SENSITIVE_WORDS);
         }
-        if (updateArticleDto.getTagsList() != null) {
+        if (!CollectionUtils.isEmpty(updateArticleDto.getTagsList())) {
             LambdaQueryWrapper<ArticleTag> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(ArticleTag::getArticleId, updateArticleDto.getId());
             articleTagMapper.delete(wrapper);
@@ -274,7 +273,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Long viewCount = 0L;
         for (Article article : articles)
             viewCount += article.getViewCount();
-        UserInfoVo userInfoVo = new UserInfoVo(id, nickname, url, createTime, viewCount, like, comment, collection);
+        LambdaQueryWrapper<Article> articleLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        articleLambdaQueryWrapper.eq(Article::getCreateBy, username);
+        Long articleCount = baseMapper.selectCount(wrapper);
+        UserInfoVo userInfoVo = new UserInfoVo(id, nickname, url, createTime, viewCount, like, comment, collection, articleCount);
         redisCache.setCacheObject(USER_INFO + username, userInfoVo);
         return ResponseResult.okResult(userInfoVo);
     }
