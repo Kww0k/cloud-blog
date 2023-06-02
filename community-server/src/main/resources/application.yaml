@@ -3,8 +3,8 @@ spring:
     name: community-server
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://8.130.64.58:3306/oauth
-    username: cxc_oauth
+    url: jdbc:mysql://8.130.130.88:3306/community
+    username: root
     password: Cxcacm1230
   redis:
     host: 8.130.64.58
