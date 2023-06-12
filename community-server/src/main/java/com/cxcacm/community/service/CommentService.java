@@ -2,6 +2,8 @@ package com.cxcacm.community.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cxcacm.community.entity.Comment;
+import com.cxcacm.community.entity.ResponseResult;
+import com.cxcacm.community.controller.dto.AddCommentDto;
 
 
 /**
@@ -12,4 +14,7 @@ import com.cxcacm.community.entity.Comment;
  */
 public interface CommentService extends IService<Comment> {
 
+    ResponseResult addComment(AddCommentDto addCommentDto);
+
+    ResponseResult getCommentList(Long id);
 }

@@ -22,9 +22,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 public class Comment  {
     @TableId
     private Long id;
-
     //论文id
-    private Long articleId;
+    private Long communityId;
     //根评论id
     private Long rootId;
     //评论内容

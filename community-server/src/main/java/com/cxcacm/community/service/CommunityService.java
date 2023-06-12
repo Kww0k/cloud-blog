@@ -1,7 +1,10 @@
 package com.cxcacm.community.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cxcacm.community.controller.dto.AddCommunityDto;
+import com.cxcacm.community.controller.dto.UpdateCommunityDto;
 import com.cxcacm.community.entity.Community;
+import com.cxcacm.community.entity.ResponseResult;
 
 
 /**
@@ -12,4 +15,19 @@ import com.cxcacm.community.entity.Community;
  */
 public interface CommunityService extends IService<Community> {
 
+    ResponseResult addCommunity(AddCommunityDto addCommunityDto);
+
+    ResponseResult updateViewCount(Long id);
+
+    ResponseResult getCommunitiesList(String title, Integer pageNum, Integer pageSize);
+
+    ResponseResult getTopList(Integer num);
+
+    ResponseResult updateCommunity(UpdateCommunityDto updateCommunityDto);
+
+    ResponseResult deleteById(Long id);
+
+    ResponseResult getSelfCommunities(String status);
+
+    ResponseResult getCommunityInfo(Long id);
 }

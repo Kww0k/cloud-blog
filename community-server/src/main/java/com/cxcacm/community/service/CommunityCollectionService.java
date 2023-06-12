@@ -1,7 +1,9 @@
 package com.cxcacm.community.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cxcacm.community.controller.dto.GiveLikeDto;
 import com.cxcacm.community.entity.CommunityCollection;
+import com.cxcacm.community.entity.ResponseResult;
 
 
 /**
@@ -12,4 +14,9 @@ import com.cxcacm.community.entity.CommunityCollection;
  */
 public interface CommunityCollectionService extends IService<CommunityCollection> {
 
+    ResponseResult giveCollection(GiveLikeDto giveLikeDto);
+
+    ResponseResult deleteCollection(GiveLikeDto giveLikeDto);
+
+    ResponseResult getCollectionList(String username);
 }

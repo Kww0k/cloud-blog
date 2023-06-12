@@ -18,6 +18,12 @@ public class CommunityConstants {
 
     public static final String LOGIN_KEY = "LOGIN_KEY:";
 
+    public static final int INCREMENT_VALUE = 1;
+
+    public static final String COMMUNITY_STATUE = "0";
+
+    public static final String COMMUNITY_VIEW_COUNT = "communityViewCount:";
+
     public static final String USER_INFO = "user_info:";
     public static final String USER_ID = "id";
     public static final String USER_NICKNAME = "nickname";
