@@ -39,7 +39,7 @@ public class CxcSecurityFilter extends OncePerRequestFilter {
             WebUtils.renderString(response, JSON.toJSONString(result));
             return;
         }
-        if (request.getRequestURL().toString().contains("/article/api/") || request.getRequestURL().toString().contains("/comment/api/")) {
+        if (request.getRequestURL().toString().contains("/community/api/") || request.getRequestURL().toString().contains("/communityComment/api/")) {
             filterChain.doFilter(request, response);
             return;
         }

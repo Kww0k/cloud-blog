@@ -3,6 +3,8 @@ package com.cxcacm.community.entity;
 import java.util.Date;
 
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,7 +38,10 @@ public class Comment  {
     private Integer delFlag;
     
     private String commentTo;
-
+    @TableField(exist = false)
+    private String nickname;
+    @TableField(exist = false)
+    private String url;
 
 
 }

@@ -8,6 +8,7 @@ import lombok.Data;
  */
 @Data
 public class UpdateCommunityDto {
+    private Long id;
     //标题
     private String title;
     //文章内容

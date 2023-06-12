@@ -31,6 +31,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers(HttpMethod.GET, "/article/api/**" , "/comment/api/**"); // 对 文件下载接口进行放行
+                .antMatchers(HttpMethod.GET, "/community/api/**" , "/communityComment/api/**"); // 对 文件下载接口进行放行
     }
 }
