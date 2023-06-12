@@ -49,6 +49,10 @@ public class Community  {
     private Date updateTime;
     //删除标志（0代表未删除，1代表已删除）
     private Integer delFlag;
+    @TableField(exist = false)
+    private String nickname;
+    @TableField(exist = false)
+    private String url;
 
     public Community(Long id, long viewCount) {
         this.id = id;

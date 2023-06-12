@@ -1,5 +1,6 @@
 package com.cxcacm.community.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -92,8 +93,17 @@ public class CommunityServiceImpl extends ServiceImpl<CommunityMapper, Community
         LambdaQueryWrapper<Community> wrapper = new LambdaQueryWrapper<>();
         if (StringUtils.hasText(title))
             wrapper.like(Community::getTitle, title); // 判断是否需要根据讨论标题查询
+        wrapper.eq(Community::getStatus, COMMUNITY_STATUE);
         Long count = baseMapper.selectCount(wrapper); // 获取讨论数量
         Page<Community> page = page(new Page<>(pageNum, pageSize), wrapper);
+        List<Community> communities = page.getRecords();
+        for (Community community : communities) {
+            Object commentUserInfo = redisCache.getCacheObject(USER_INFO + community.getCreateBy());
+            String nickname = (String) ((JSONObject) commentUserInfo).get(USER_NICKNAME);
+            String url = (String) ((JSONObject) commentUserInfo).get(USER_URL);
+            community.setNickname(nickname);
+            community.setUrl(url);
+        }
         List<CommunityListVo> communityListVos = BeanCopyUtils.copyBeanList(page.getRecords(), CommunityListVo.class);
         return ResponseResult.okResult(new CommunityPage(count, communityListVos));
     }
@@ -113,6 +123,13 @@ public class CommunityServiceImpl extends ServiceImpl<CommunityMapper, Community
         wrapper.eq(Community::getStatus, COMMUNITY_STATUE); // 需要是已经发布的讨论
         wrapper.last("limit " + num.toString()); // 根据传入的数量进行限制
         List<Community> communities = baseMapper.selectList(wrapper);
+        for (Community community : communities) {
+            Object commentUserInfo = redisCache.getCacheObject(USER_INFO + community.getCreateBy());
+            String nickname = (String) ((JSONObject) commentUserInfo).get(USER_NICKNAME);
+            String url = (String) ((JSONObject) commentUserInfo).get(USER_URL);
+            community.setNickname(nickname);
+            community.setUrl(url);
+        }
         List<CommunityListVo> communityListVos = BeanCopyUtils.copyBeanList(communities, CommunityListVo.class);
         return ResponseResult.okResult(communityListVos);
     }

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @Author: Silvery
  * @Date: 2023/6/12 21:54
@@ -19,4 +21,8 @@ public class CommunityListVo {
     private String content;
     //缩略图
     private String thumbnail;
+    private Long viewCount;
+    private String url;
+    private String nickname;
+    private Date createTime;
 }

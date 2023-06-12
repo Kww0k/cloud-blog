@@ -9,6 +9,18 @@ spring:
         locator:
           enabled: true
       routes:
+        - id: community-server
+          uri: http://8.130.130.88:8080
+          predicates:
+            - Path=/community/**
+        - id: community-server
+          uri: http://8.130.130.88:8080
+          predicates:
+            - Path=/communityComment/**
+        - id: community-server
+          uri: http://8.130.130.88:8080
+          predicates:
+            - Path=/communityCollection/**
         - id: event-server
           uri: http://8.130.54.207:8080
           predicates:

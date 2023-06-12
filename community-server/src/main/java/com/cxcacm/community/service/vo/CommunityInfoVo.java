@@ -1,7 +1,6 @@
 package com.cxcacm.community.service.vo;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.Data;
 
 import java.util.Date;
 
@@ -9,6 +8,7 @@ import java.util.Date;
  * @Author: Silvery
  * @Date: 2023/6/12 22:35
  */
+@Data
 public class CommunityInfoVo {
     private Long id;
     //标题
@@ -19,5 +19,7 @@ public class CommunityInfoVo {
     private String thumbnail;
 
     private String createBy;
+
+    private Date createTime;
 
 }
