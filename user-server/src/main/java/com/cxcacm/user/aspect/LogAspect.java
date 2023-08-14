@@ -21,12 +21,10 @@ public class LogAspect {
 
     @Pointcut("@annotation(com.cxcacm.user.annotation.SystemLog)")
     public void pt() {
-
     }
 
     @Around("pt()")
     public Object pointLog(ProceedingJoinPoint joinPoint) throws Throwable {
-
         Object ret;
         try {
             handleBefore(joinPoint);
@@ -35,7 +33,6 @@ public class LogAspect {
         } finally {
             log.info("=======END=======" + System.lineSeparator());
         }
-
         return ret;
     }
 

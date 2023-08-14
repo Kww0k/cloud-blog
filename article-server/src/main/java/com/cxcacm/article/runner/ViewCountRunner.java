@@ -26,7 +26,7 @@ public class ViewCountRunner implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         List<Article> articles = articleMapper.selectList(null);
         Map<String, Integer> viewCountMap = articles.stream()
                 .collect(Collectors.toMap(article1 -> article1.getId().toString(), article -> article.getViewCount().intValue()));

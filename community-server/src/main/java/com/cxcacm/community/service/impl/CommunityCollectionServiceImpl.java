@@ -11,7 +11,7 @@ import com.cxcacm.community.mapper.CommunityMapper;
 import com.cxcacm.community.service.CommunityCollectionService;
 import com.cxcacm.community.service.vo.CommunityListVo;
 import com.cxcacm.community.utils.BeanCopyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -26,14 +26,10 @@ import static com.cxcacm.community.enums.AppHttpCodeEnum.SYSTEM_ERROR;
  * @since 2023-06-02 22:18:31
  */
 @Service("communityCollectionService")
+@RequiredArgsConstructor
 public class CommunityCollectionServiceImpl extends ServiceImpl<CommunityCollectionMapper, CommunityCollection> implements CommunityCollectionService {
 
     private final CommunityMapper communityMapper;
-
-    @Autowired
-    public CommunityCollectionServiceImpl(CommunityMapper communityMapper) {
-        this.communityMapper = communityMapper;
-    }
 
     /**
      * 收藏

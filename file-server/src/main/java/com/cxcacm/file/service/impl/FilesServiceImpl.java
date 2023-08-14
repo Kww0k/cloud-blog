@@ -1,7 +1,6 @@
 package com.cxcacm.file.service.impl;
 
 import cn.hutool.core.io.FileUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cxcacm.file.entity.Files;
 import com.cxcacm.file.mapper.FilesMapper;
